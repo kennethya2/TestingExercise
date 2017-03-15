@@ -29,7 +29,10 @@ com.android.support.test.espresso:espresso-core:2.2.2
 
 路徑：module-name/src/test/java/uitl/CalculatorTest.java
 
-##### 測試Calculator運算是否符合預期
+##### 1. 測試Calculator運算是否符合預期
+
+Assert.assertEquals(expected, actual, 誤差範圍)
+
 <pre><code>	
 
 public class CalculatorTest {
@@ -69,9 +72,9 @@ public class CalculatorTest {
 </code></pre>
 
 
-##### 相依注入Dependency Injection
+##### 2. 相依注入Dependency Injection
 
-- ######模擬函式回傳結果
+- 模擬函式回傳結果
 
 利用Mockito模擬Calculator所相依類別MathUtils其呼叫函式``checkZero(int num)``回傳結果
 
@@ -106,7 +109,7 @@ public class CalculatorTest {
     
 </code></pre>
 
-- ######驗證函式呼叫次數
+- 驗證函式呼叫次數
 
 每呼叫一次運算function觸發Logger``logAction(String action)``
 
@@ -147,7 +150,7 @@ Mockito.verify() 驗證Logger呼叫``logAction(String action)``次數
 </code></pre>
 
 
-- ######注意 Error: "Method ... not mocked"
+- 注意 Error: "Method ... not mocked"
 
 單元測試無法無法執行android api函式，必須使用mock模擬android呼叫行為。
 
