@@ -1,4 +1,10 @@
 
+#TestingExercise
+
+- [Gradle加入測試函式庫](https://github.com/kennethya2/TestingExercise#Gradle加入測試函式庫) 
+- [單元測試](https://github.com/kennethya2/TestingExercise#單元測試) 
+- [實機測試](https://github.com/kennethya2/TestingExercise#實機測試) 
+
 
 ### Gradle加入測試函式庫
 ----
@@ -27,7 +33,7 @@ com.android.support.test.espresso:espresso-core:2.2.2
 ### 單元測試
 ----
 
-路徑：module-name/src/test/java/uitl/CalculatorTest.java
+路徑：module-name/src/test/java/<package_name>/uitl/CalculatorTest.java
 
 ##### 1. 測試Calculator運算是否符合預期
 
@@ -74,7 +80,7 @@ public class CalculatorTest {
 
 ##### 2. 相依注入Dependency Injection
 
-- 模擬函式回傳結果
+###### 模擬函式回傳結果
 
 利用Mockito模擬Calculator所相依類別MathUtils其呼叫函式``checkZero(int num)``回傳結果
 
@@ -109,7 +115,7 @@ public class CalculatorTest {
     
 </code></pre>
 
-- 驗證函式呼叫次數
+###### 驗證函式呼叫次數
 
 每呼叫一次運算function觸發Logger``logAction(String action)``
 
@@ -150,7 +156,7 @@ Mockito.verify() 驗證Logger呼叫``logAction(String action)``次數
 </code></pre>
 
 
-- 注意 Error: "Method ... not mocked"
+###### 注意 Error: "Method ... not mocked"
 
 單元測試無法無法執行android api函式，必須使用mock模擬android呼叫行為。
 
@@ -164,3 +170,69 @@ android {
   }
 }
 </code></pre>
+
+參考：[Building Local Unit Tests](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html)
+
+### 實機測試
+----
+
+路徑：module-name/src/androidTest/java/<package_name>/MainActivityEspressoTest.java
+
+1.首先定義欲測試的Activity
+
+
+ ``ActivityTestRule<MainActivity> mActivityRule 
+    = new ActivityTestRule<>(MainActivity.class)``
+    
+
+2.模擬輸入字串
+	
+``onView(withId(R.id.editText)).perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard()) ``
+        
+3.點擊包含字串``"Who Are You?"``的按鈕，將自顯示於TextView
+
+MainActivity.java
+<pre><code>
+	...
+    public void hello(View v){
+        TextView textView = (TextView) findViewById(R.id.textView);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        textView.setText(COOL + editText.getText().toString() );
+    }
+ </code></pre>
+
+4.比對TextView顯示字串是否為預期節果
+
+ ``onView(withId(R.id.textView))
+        .check(matches(withText(expectedText)))``
+        
+
+<pre><code>
+public class MainActivityEspressoTest {
+
+    private static final String STRING_TO_BE_TYPED = "Ken";
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule 
+    = new ActivityTestRule<>(MainActivity.class);
+
+    @Test
+    public void sayHello(){
+        onView(withId(R.id.editText))
+        .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard()); //line 1
+
+        onView(withText("Who Are You?"))
+        .perform(click()); //line 2
+
+        String expectedText = MainActivity.COOL + STRING_TO_BE_TYPED ;
+        onView(withId(R.id.textView))
+        .check(matches(withText(expectedText))); //line 3
+    }
+}
+</code></pre>
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/AjpQtPBtRUM/0.jpg)](https://youtu.be/AjpQtPBtRUM)
+
+
+參考：[Testing UI for a Single App](https://developer.android.com/training/testing/ui-testing/espresso-testing.html)
+
