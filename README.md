@@ -1,7 +1,7 @@
 
 #TestingExercise
 
-- [Gradle加入測試函式庫](https://github.com/kennethya2/TestingExercise#Gradle加入測試函式庫) 
+- [Gradle加入測試函式庫](https://github.com/kennethya2/TestingExercise#gradle加入測試函式庫) 
 - [單元測試](https://github.com/kennethya2/TestingExercise#單元測試) 
 - [實機測試](https://github.com/kennethya2/TestingExercise#實機測試) 
 
